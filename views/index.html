@@ -19,28 +19,68 @@
   var restaurants = {{ restaurants | dump | safe }};
   var activities = {{ activities | dump | safe }};
   console.log(hotels);
-  
+
   var hotelsSelector = $('#hotels');
   var restaurantsSelector = $('#restaurants');
   var activitiesSelector = $('#activities');
-  
-  
+
+
   hotels.forEach( hotel => {
-    hotelsSelector.append(`<option data-info = ${hotel}> ${hotel.name} </option`);
+    hotelsSelector.append(`<option class="hotel"> ${hotel.name} </option>`);
+    // data-info = ${hotel}
   })
-  
+
   restaurants.forEach( restaurants => {
-    restaurantsSelector.append(`<option> ${restaurants.name} </option`);
+    restaurantsSelector.append(`<option class="restaurant"> ${restaurants.name} </option>`);
   })
-  
+
   activities.forEach( activities => {
-    activitiesSelector.append(`<option> ${activities.name} </option`);
+    activitiesSelector.append(`<option class="activity"> ${activities.name} </option>`);
   })
-  
-  
+
+  const days = [{
+    hotel: '',
+    restaurant : [],
+    activity: []
+
+  }];
   $('button').on('click', function() {
-    console.log($(this).parent().find(':selected'));
+
+    let selection = $(this).parent().find(':selected');
+    if(selection[0].className === 'hotel'){
+      days[0].hotel = selection.val();
+      $('#todaysHotel li').html(days[0].hotel)
+    }
+    if(selection[0].className === 'restaurant'){
+      days[0].restaurant.push(selection.val())
+      $('#todaysRestaurants ul').append(`<li class='list-group-item'> ${days[0].restaurant[days[0].restaurant.length-1]} </li>`)
+    }
+    if(selection[0].className === 'activity'){
+      days[0].activity.push(selection.val())
+       $('#todaysActivities ul').append(`<li class='list-group-item'> ${days[0].activity[days[0].activity.length-1]} </li>`)
+    }
+
+    console.log(days);
 
   })
+
+
+$('.nav li').click(function(){
+  $("li").removeclass("active");
+  $(this).addClass("active");
+
+})
+
+
+$('#addDay').click(function(){
+  days.push({
+    hotel: '',
+    restaurant : [],
+    activity: []
+  });
+
+
+})
+
 </script>
 {% endblock %}
